@@ -48,7 +48,7 @@ client.connect(err => {
       const volunteer = req.body;
       volunteerCollection.insertOne(volunteer)
       .then(result => {
-          res.send(result.insertedCount > 0)
+          res.send(result.insertedCount > 0);
       })
   })
 
@@ -58,6 +58,13 @@ client.connect(err => {
     .toArray((err,documents)=>{
         res.send(documents);
     })
+  })
+
+  app.delete('/delete/:id', (req, res)=>{
+    volunteerCollection.deleteOne({_id: ObjectId(req.params.id)})
+      .then(result=>{
+          res.send(result.deletedCount > 0);
+      })
   })
   
 });
