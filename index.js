@@ -41,7 +41,7 @@ client.connect(err => {
       const volunteer = req.body;
       volunteerCollection.insertOne(volunteer)
       .then(result => {
-          res.send(result.insertedCount > 0);
+          res.send(result);
       })
   })
 
