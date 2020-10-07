@@ -21,16 +21,9 @@ client.connect(err => {
   const eventsCollection = client.db("volunteerNetwork").collection("events");
   const volunteerCollection = client.db("volunteerNetwork").collection("volunteer");
   
-  app.post('/addEvent',(req, res)=>{
-      const events = req.body;
-      eventsCollection.insertMany(events)
-      .then(result =>{
-          res.send(insertedCount > 0);
-      })
-  })
+
 
   app.get('/events', (req, res)=>{
-    //   const events = req.body;
       eventsCollection.find({})
       .toArray((err,documents)=>{
           res.send(documents)
@@ -53,7 +46,6 @@ client.connect(err => {
   })
 
   app.get('/userevent',(req, res)=>{
-    //   console.log(req.query.email);
     volunteerCollection.find({email: req.query.email})
     .toArray((err,documents)=>{
         res.send(documents);
@@ -61,11 +53,39 @@ client.connect(err => {
   })
 
   app.delete('/delete/:id', (req, res)=>{
+    console.log(req.params.id);
     volunteerCollection.deleteOne({_id: ObjectId(req.params.id)})
       .then(result=>{
+        console.log(result);
           res.send(result.deletedCount > 0);
       })
   })
+
+  app.get('/allvolunteer', (req, res)=>{
+    volunteerCollection.find({})
+    .toArray((err,documents)=>{
+      res.send(documents)
+    })
+
+  })
+
+  app.delete('/deletevolunteer/:id',(req, res)=>{
+
+    volunteerCollection.deleteOne({_id: ObjectId(req.params.id)})
+    .then(result =>{
+      res.send(result.deletedCount > 0)
+    })
+
+  })
+
+  app.post('/addevent',(req, res)=>{
+    const event = req.body;
+    eventsCollection.insertOne(event)
+    .then(result =>{
+        // res.send(insertedCount > 0);
+        console.log(result);
+    })
+})
   
 });
 
